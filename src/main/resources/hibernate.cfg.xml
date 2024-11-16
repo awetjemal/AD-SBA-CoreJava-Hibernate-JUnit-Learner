@@ -13,9 +13,9 @@
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
         <!--Creates database, if it does not exist-->
-        <property name="connection.url">jdbc:mysql://localhost:3306/smsdb-ll?createDatabaseIfNotExist=true</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/smsdb-11?createDatabaseIfNotExist=true</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">root</property>
+        <property name="connection.password">PerScholas102424</property>
 
         <!-- MySQL DB dialect -->
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>

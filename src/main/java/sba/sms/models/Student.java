@@ -16,8 +16,23 @@ import java.util.Set;
  * data. The Student class can be viewed as the owner of the bi-directional relationship.
  * Implement Lombok annotations to eliminate boilerplate code.
  */
-
+@Entity
+@Table(name = "students")
+@Data
 public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "password")
+    private String password;
 
 
     }
