@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import sba.sms.dao.StudentI;
 import sba.sms.models.Course;
 import sba.sms.models.Student;
+import sba.sms.models.StudentCourse;
 import sba.sms.utils.HibernateUtil;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ import java.util.List;
 
 public class StudentService implements StudentI {
 
-    private SessionFactory factory = new Configuration().configure().buildSessionFactory();
-
+    private final SessionFactory factory = new Configuration().configure().buildSessionFactory();
+    private final CourseService courseService = new CourseService();
     @Override
     public List<Student> getAllStudents() {
         Session session = factory.openSession();
@@ -83,11 +84,38 @@ public class StudentService implements StudentI {
 
     @Override
     public void registerStudentToCourse(String email, int courseId) {
+        Session session = factory.openSession();
+        Student student = getStudentByEmail(email);
+        StudentCourse studentCourse = new StudentCourse();
+        studentCourse.setCourseId(courseId);
+        studentCourse.setStudentId(student.getId());
+        session.getTransaction().begin();
+        session.persist(studentCourse);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public List<Course> getStudentCourses(String email) {
-        return List.of();
+        Session session = factory.openSession();
+        Student student = getStudentByEmail(email);
+        String hql = "SELECT courseId FROM StudentCourse s WHERE s.studentId = :sId";
+        TypedQuery<Integer> query = session.createQuery(hql, Integer.class);
+        query.setParameter("sId", student.getId());
+        List<Integer> studentCoursesIds = new ArrayList<>();
+        List<Course> studentCourses = new ArrayList<>();
+        try{
+            studentCoursesIds = query.getResultList();
+            for(Integer courseId : studentCoursesIds){
+                studentCourses.add(courseService.getCourseById(courseId));
+            }
+            return  studentCourses;
+        }catch (HibernateException e){
+            System.out.println(e.getMessage());
+            return null;
+        }finally {
+            session.close();
+        }
+        //return null;
     }
 }
