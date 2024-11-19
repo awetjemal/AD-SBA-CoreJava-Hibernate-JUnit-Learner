@@ -19,6 +19,8 @@ import java.util.Set;
 @Entity
 @Table(name = "students")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +37,12 @@ public class Student {
     private String password;
 
 
+    public Student(String mail, String reemaBrown, String password) {
+        this.email = mail;
+        this.name = reemaBrown;
+        this.password = password;
     }
+}
 
 
 

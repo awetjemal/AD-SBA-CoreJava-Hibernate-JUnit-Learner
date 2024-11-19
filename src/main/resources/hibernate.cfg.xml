@@ -9,11 +9,15 @@
         <!-- Drop and re-create the database on startup -->
         <property name="hibernate.hbm2ddl.auto"> create-drop </property>
 
+        <!-- allow hibernate to get stuff even after the session is closed -->
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
+
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
         <!--Creates database, if it does not exist-->
-        <property name="connection.url">jdbc:mysql://localhost:3306/smsdb-11?createDatabaseIfNotExist=true</property>
+    <!--<property name="connection.url">jdbc:mysql://localhost:3306/smsdb-11?createDatabaseIfNotExist=true</property>-->
+        <property name="connection.url">jdbc:mysql://localhost:3306/smsdb-11</property>
         <property name="connection.username">root</property>
         <property name="connection.password">PerScholas102424</property>
 
@@ -26,6 +30,7 @@
         <!--   Mapping entity file -->
         <mapping class="sba.sms.models.Student"/>
         <mapping class="sba.sms.models.Course"/>
+        <mapping class="sba.sms.models.StudentCourse"/>
 
     </session-factory>
 </hibernate-configuration>

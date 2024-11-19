@@ -18,6 +18,8 @@ import java.util.Set;
 @Entity
 @Table(name = "courses")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +31,9 @@ public class Course {
 
     @Column(name = "instructor")
     private String instructor;
+
+    public Course(String frontend, String williamRoales) {
+        this.name = frontend;
+        this.instructor = williamRoales;
+    }
 }

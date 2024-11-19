@@ -65,8 +65,14 @@ public class App {
                         System.out.print("select course #: ");
                         int courseId = input.nextInt();
                         if (courseId > 0 && courseId <= courseList.size()) {
-                            studentService.registerStudentToCourse(email, (courseId));
-                            System.out.printf("successfully register %s to %s%n", studentService.getStudentByEmail(email).getName(), courseService.getCourseById(courseId).getName());
+                            //fix so that it won't register a student to the same course twice
+                            if(!studentService.getStudentCourses(email).contains(courseService.getCourseById(courseId))){
+                                studentService.registerStudentToCourse(email, (courseId));
+                                System.out.printf("successfully register %s to %s%n", studentService.getStudentByEmail(email).getName(), courseService.getCourseById(courseId).getName());
+                            }else{
+                                System.out.println("Already registered to the course");
+                            }
+
                             printStudentCourses(email);
                         } else {
                             System.out.printf("course id not found!%n");

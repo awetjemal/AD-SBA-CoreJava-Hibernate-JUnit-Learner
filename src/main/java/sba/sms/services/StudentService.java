@@ -63,8 +63,8 @@ public class StudentService implements StudentI {
         query.setParameter("email", email);
 
         try {
-            return  query.getSingleResult();
-        }catch (HibernateException e) {
+            return query.getSingleResult();
+        }catch (Exception e) {
             //System.out.println(e.getMessage());
             return null;
         }finally {
@@ -84,14 +84,20 @@ public class StudentService implements StudentI {
 
     @Override
     public void registerStudentToCourse(String email, int courseId) {
-        Session session = factory.openSession();
-        Student student = getStudentByEmail(email);
-        StudentCourse studentCourse = new StudentCourse();
-        studentCourse.setCourseId(courseId);
-        studentCourse.setStudentId(student.getId());
-        session.getTransaction().begin();
-        session.persist(studentCourse);
-        session.getTransaction().commit();
+
+
+
+            Session session = factory.openSession();
+            Student student = getStudentByEmail(email);
+
+            StudentCourse studentCourse = new StudentCourse();
+            studentCourse.setCourseId(courseId);
+            studentCourse.setStudentId(student.getId());
+
+            session.getTransaction().begin();
+            session.persist(studentCourse);
+            session.getTransaction().commit();
+
 
     }
 
@@ -102,14 +108,19 @@ public class StudentService implements StudentI {
         String hql = "SELECT courseId FROM StudentCourse s WHERE s.studentId = :sId";
         TypedQuery<Integer> query = session.createQuery(hql, Integer.class);
         query.setParameter("sId", student.getId());
-        List<Integer> studentCoursesIds = new ArrayList<>();
+//        System.out.println("result list -- "+query.getSingleResult());
+        List<Integer> studentCoursesIds;
         List<Course> studentCourses = new ArrayList<>();
         try{
             studentCoursesIds = query.getResultList();
-            for(Integer courseId : studentCoursesIds){
-                studentCourses.add(courseService.getCourseById(courseId));
+            if(!studentCoursesIds.isEmpty()){
+                for(Integer courseId : studentCoursesIds){
+                    studentCourses.add(courseService.getCourseById(courseId));
+                }
+
             }
-            return  studentCourses;
+            return studentCourses;
+
         }catch (HibernateException e){
             System.out.println(e.getMessage());
             return null;
